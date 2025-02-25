@@ -60,6 +60,9 @@ jobs:
           echo "AVIATRIX_USERNAME=${{ secrets.AVIATRIX_USERNAME }}" >> $GITHUB_ENV
           echo "AVIATRIX_PASSWORD=${{ secrets.AVIATRIX_PASSWORD }}" >> $GITHUB_ENV
 
+      - name: Initialize Terraform
+        run: terraform init
+
       - name: Download Terraform Plan
         uses: actions/download-artifact@v4
         with:
