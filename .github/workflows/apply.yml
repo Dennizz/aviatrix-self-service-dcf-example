@@ -1,0 +1,47 @@
+name: "Terraform Apply"
+
+on:
+  workflow_run:
+    workflows: ["Terraform Plan"]  # Ensures this runs only after terraform-plan.yml
+    types:
+      - completed
+  push:
+    branches:
+      - main  # Runs when a PR is merged to main
+
+jobs:
+  terraform-apply:
+    name: "Terraform Apply"
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: latest
+
+      - name: Configure environment variables
+        run: |
+          echo "AVIATRIX_CONTROLLER_IP=${{ secrets.AVIATRIX_CONTROLLER_IP }}" >> $GITHUB_ENV
+          echo "AVIATRIX_USERNAME=${{ secrets.AVIATRIX_USERNAME }}" >> $GITHUB_ENV
+          echo "AVIATRIX_PASSWORD=${{ secrets.AVIATRIX_PASSWORD }}" >> $GITHUB_ENV
+
+      - name: Initialize Terraform
+        run: terraform init
+
+      - name: Download Terraform Plan
+        uses: actions/download-artifact@v4
+        with:
+          name: terraform-plan
+
+      - name: Apply Terraform Plan
+        run: terraform apply -auto-approve tfplan
+
+      - name: Delete Terraform Plan Artifact
+        if: success()
+        uses: geekyeggo/delete-artifact@v2
+        with:
+          name: terraform-plan
