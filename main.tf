@@ -2,6 +2,6 @@ data "aviatrix_caller_identity" "test" {
 
 }
 
-output "test2" {
+output "test" {
   value = data.aviatrix_caller_identity.test
 }
