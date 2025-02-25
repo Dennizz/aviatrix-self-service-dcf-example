@@ -1,12 +1,9 @@
-name: "Terraform Pipeline"
+name: "Terraform Predictive Plan"
 
 on:
   pull_request:
     branches:
       - main
-  push:
-    branches:
-      - main  # Triggers apply automatically when PR is merged
 
 permissions:
   pull-requests: write  # Allows posting PR comments
@@ -14,10 +11,9 @@ permissions:
   contents: read
 
 jobs:
-  terraform-plan:
-    name: "Terraform Plan"
+  terraform-predictive-plan:
+    name: "Terraform Predictive Plan"
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
     environment: prod
     steps:
       - name: Checkout repository
@@ -62,47 +58,3 @@ jobs:
               
               *(Note: Truncated if too long. Check logs for full plan.)*`
             });
-
-      - name: Upload Terraform Plan Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: terraform-plan
-          path: tfplan
-
-  terraform-apply:
-    name: "Terraform Apply"
-    needs: terraform-plan
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-    environment: prod 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: latest
-
-      - name: Configure environment variables
-        run: |
-          echo "AVIATRIX_CONTROLLER_IP=${{ secrets.AVIATRIX_CONTROLLER_IP }}" >> $GITHUB_ENV
-          echo "AVIATRIX_USERNAME=${{ secrets.AVIATRIX_USERNAME }}" >> $GITHUB_ENV
-          echo "AVIATRIX_PASSWORD=${{ secrets.AVIATRIX_PASSWORD }}" >> $GITHUB_ENV
-
-      - name: Initialize Terraform
-        run: terraform init
-
-      - name: Download Terraform Plan
-        uses: actions/download-artifact@v4
-        with:
-          name: terraform-plan
-
-      - name: Apply Terraform Plan
-        run: terraform apply -auto-approve tfplan
-
-      - name: Delete Terraform Plan Artifact
-        if: success()
-        uses: geekyeggo/delete-artifact@v2
-        with:
-          name: terraform-plan
