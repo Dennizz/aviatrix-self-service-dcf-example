@@ -6,6 +6,7 @@ app1-smartgroup:
       k8s_namespace: testnamespace
       k8s_pod: testpod
     - region-us-west-2:
+      type: vm
       region: us-west-2
 
 app2-smartgroup:
@@ -16,4 +17,5 @@ app2-smartgroup:
       k8s_namespace: testnamespace
       k8s_pod: testpod
     - region-us-west-2:
+      type: vm
       region: us-west-2
