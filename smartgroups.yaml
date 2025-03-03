@@ -7,7 +7,7 @@ app1-smartgroup:
       k8s_pod: testpod
     - region-us-west-2:
       type: vm
-      region: us-west-2
+      region: us-west-1
 
 app2-smartgroup:
   match_expressions:
