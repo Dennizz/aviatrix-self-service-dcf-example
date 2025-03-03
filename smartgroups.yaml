@@ -1,0 +1,19 @@
+app1-smartgroup:
+  match_expressions:
+    - k8s-cluster:
+      type: k8s
+      k8s_cluster_id: 1234566778
+      k8s_namespace: testnamespace
+      k8s_pod: testpod
+    - region-us-west-2:
+      region: us-west-2
+
+app2-smartgroup:
+  match_expressions:
+    - k8s-cluster:
+      type: k8s
+      k8s_cluster_id: 1234566778
+      k8s_namespace: testnamespace
+      k8s_pod: testpod
+    - region-us-west-2:
+      region: us-west-2

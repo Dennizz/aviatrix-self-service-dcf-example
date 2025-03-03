@@ -1,0 +1,14 @@
+app1-url:
+  urlfilter:
+    - "www.nu.nl/bla"
+    - "www.test.com/fiets"
+
+app1-sni:
+  snifilter:
+    - "www.cnn.com"
+    - "www.test2.com"
+
+app2-url:
+  urlfilter:
+    - "www.nu.nl/bla"
+    - "www.test.com/fiets"
