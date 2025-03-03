@@ -1,1 +1,7 @@
-policies:
+app1-policy:
+  src_smart_group_names:
+    - app1-smartgroup
+  dst_smart_group_names:
+    - app2-smartgroup
+  protocol: tcp
+  action: permit
